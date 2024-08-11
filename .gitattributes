@@ -1,2 +1,195 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotics Club Quiz</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .question {
+            margin: 20px 0;
+            font-size: 18px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .options li {
+            margin: 10px 0;
+        }
+        .options button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            background: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .options button:hover {
+            background: #45a049;
+        }
+        .start-btn {
+            display: inline-block;
+            background: #008CBA;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .start-btn:hover {
+            background: #005f73;
+        }
+        .score {
+            font-size: 24px;
+            color: #333;
+            margin-top: 20px;
+        }
+        .quote {
+            font-size: 18px;
+            color: #555;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        .congo-animation {
+            font-size: 24px;
+            color: #28a745;
+            animation: celebrate 1.5s ease;
+        }
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); color: #d4edda; }
+            100% { transform: scale(1); color: #28a745; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Robotics Club Quiz</h1>
+        <div id="quiz-container">
+            <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
+        </div>
+        <div id="score-container" class="score"></div>
+        <div id="quote-container" class="quote"></div>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                question: "Which field involves creating three-dimensional objects using software?",
+                options: ["Robotics", "Internet of Things", "3D Modeling", "Web Development"],
+                correctAnswer: "3D Modeling"
+            },
+            {
+                question: "What does IoT stand for?",
+                options: ["Internet of Things", "Internet of Technology", "Internet of Time", "Internet of Tools"],
+                correctAnswer: "Internet of Things"
+            },
+            {
+                question: "Which technology is used to control robots remotely?",
+                options: ["Virtual Reality", "IoT", "3D Modeling", "Artificial Intelligence"],
+                correctAnswer: "IoT"
+            },
+            {
+                question: "Which of the following is a core activity of a robotics club?",
+                options: ["3D Modeling", "IoT", "Web Development", "All of the above"],
+                correctAnswer: "All of the above"
+            },
+            {
+                question: "What is the brain of a robot called?",
+                options: ["Motor", "Controller", "Actuator", "Sensor"],
+                correctAnswer: "Controller"
+            },
+            // Add more questions here if needed
+        ];
+
+        let shuffledQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function startQuiz() {
+            shuffledQuestions = questions.sort(() => 0.5 - Math.random()).slice(0, 15);
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById("score-container").innerHTML = '';
+            document.getElementById("quote-container").innerHTML = '';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const questionObj = shuffledQuestions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz-container");
+
+            quizContainer.innerHTML = `
+                <div class="question">${currentQuestionIndex + 1}. ${questionObj.question}</div>
+                <ul class="options">
+                    ${questionObj.options.map((option, index) => `<li><button onclick="checkAnswer('${option}')">${option}</button></li>`).join('')}
+                </ul>
+            `;
+        }
+
+        function checkAnswer(selectedOption) {
+            const questionObj = shuffledQuestions[currentQuestionIndex];
+
+            if (selectedOption === questionObj.correctAnswer) {
+                document.getElementById("quote-container").innerHTML = `<div class="congo-animation">Congratulations! 🎉 You got it right!</div>`;
+                score++;
+            } else {
+                const quotes = [
+                    "Oops! Mistakes are proof you're trying.",
+                    "Don't be discouraged. It's often the last key in the bunch that opens the lock.",
+                    "Failure is simply the opportunity to begin again, this time more intelligently.",
+                    "The only real mistake is the one from which we learn nothing."
+                ];
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                document.getElementById("quote-container").innerHTML = `<div class="quote">${randomQuote}</div>`;
+            }
+
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < shuffledQuestions.length) {
+                setTimeout(showQuestion, 1000); // Delay to show the quote or animation
+            } else {
+                showScore();
+            }
+        }
+
+        function showScore() {
+            document.getElementById("quiz-container").innerHTML = `<button class="start-btn" onclick="startQuiz()">Restart Quiz</button>`;
+            document.getElementById("score-container").innerHTML = `Your score is ${score}/${shuffledQuestions.length}.`;
+        }
+    </script>
+
+</body>
+</html>
